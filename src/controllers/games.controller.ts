@@ -4,7 +4,7 @@ import * as errors from "../errors/errors";
 import httpStatus from "http-status";
 
 export async function listGames(req: Request, res: Response) {
-  const list: [] = await gamesServices.listGames();
+  const list: object[] = await gamesServices.listGames();
   res.status(httpStatus.OK).send(list);
 }
 
@@ -26,7 +26,16 @@ export async function deleteGameRelation(req: Request, res: Response) {
 
 export async function listByGames(req: Request, res: Response) {
   const { name } = req.params;
-  if (name === "") throw errors.unprocessableEntity(name);
-  const list: [] = await gamesServices.listByGames(name);
+  if (!name || name === "") throw errors.unprocessableEntity(name);
+  const list: object[] = await gamesServices.listByGames(name);
   res.status(httpStatus.OK).send(list);
+}
+
+export async function editRelation(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) throw errors.unprocessableEntity(req.params.id);
+  const { game, platform } = req.body;
+  await gamesServices.editRelation(game, platform, id);
+
+  res.sendStatus(httpStatus.OK);
 }

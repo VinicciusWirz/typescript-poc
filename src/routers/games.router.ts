@@ -12,5 +12,10 @@ gamesRouter.post(
   gamesController.createGame
 );
 gamesRouter.delete("/games/relation/:id", gamesController.deleteGameRelation);
+gamesRouter.patch(
+  "/games/relation/:id",
+  schemaValidation(gameSchema),
+  gamesController.editRelation
+);
 
 export default gamesRouter;

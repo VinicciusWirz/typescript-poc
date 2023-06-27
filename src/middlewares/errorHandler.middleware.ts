@@ -12,6 +12,8 @@ export default function errorHandler(
     return res.status(httpStatus.NOT_FOUND).send(error.message);
   if (error.type === "conflict")
     return res.status(httpStatus.CONFLICT).send(error.message);
-
+  if (error.type === "unauthorized")
+    return res.status(httpStatus.UNAUTHORIZED).send(error.message);
+console.log(error)
   return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
 }

@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+
 export function notFoundError(message: string) {
   const errorMessage: string = `${message && message} Not Found`.trim();
   return {
@@ -14,10 +16,20 @@ export function conflictError(message: string) {
   };
 }
 
-export function unprocessableEntity(message:string){
-  const errorMessage: string = `${message && message} is not a valid input`.trim();
+export function unprocessableEntity(message: string) {
+  const errorMessage: string = `${
+    message && message
+  } is not a valid input`.trim();
   return {
     type: "unprocessable-entity",
+    message: errorMessage,
+  };
+}
+
+export function unauthorized(message: string) {
+  const errorMessage: string = message ? message : `Unauthorized Access`;
+  return {
+    type: "unauthorized",
     message: errorMessage,
   };
 }
