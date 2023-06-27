@@ -5,6 +5,7 @@ import { gameSchema } from "../schemas/game.schema";
 
 const gamesRouter = Router();
 gamesRouter.get("/games", gamesController.listGames);
+gamesRouter.get("/games/:name", gamesController.listByGames);
 gamesRouter.post(
   "/games",
   schemaValidation(gameSchema),

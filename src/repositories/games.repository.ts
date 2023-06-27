@@ -73,3 +73,20 @@ export function deleteRelation(id: number) {
   const result = db.query(`DELETE FROM game_platform WHERE id = $1;`, [id]);
   return result;
 }
+
+export function listByGames(name: string) {
+  const result = db.query(
+    `
+  SELECT 
+  gp.id AS id,
+  games.name AS game, 
+  platforms.name AS platform 
+  FROM games 
+  JOIN game_platform gp ON games.id = gp.game_id
+  JOIN platforms ON gp.platform_id = platforms.id
+  WHERE games.name ILIKE $1;
+  `,
+    [`%${name}%`]
+  );
+  return result;
+}

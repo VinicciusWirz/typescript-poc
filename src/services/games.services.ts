@@ -35,3 +35,8 @@ export async function deleteGameRelation(id: number) {
 
   await gameRepository.deleteRelation(id);
 }
+
+export async function listByGames(name: string) {
+  const list = await gameRepository.listByGames(name);
+  return list.rows;
+}

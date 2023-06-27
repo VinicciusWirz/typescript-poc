@@ -23,3 +23,10 @@ export async function deleteGameRelation(req: Request, res: Response) {
   await gamesServices.deleteGameRelation(id);
   res.sendStatus(httpStatus.NO_CONTENT);
 }
+
+export async function listByGames(req: Request, res: Response) {
+  const { name } = req.params;
+  if (name === "") throw errors.unprocessableEntity(name);
+  const list: [] = await gamesServices.listByGames(name);
+  res.status(httpStatus.OK).send(list);
+}
