@@ -3,6 +3,7 @@ import { db } from "../database/database.connection";
 export function listGames(game: string, platform: string) {
   let query: string = `
   SELECT 
+    gp.id AS id,
     games.name AS game, 
     platforms.name AS platform 
     FROM games 
@@ -60,5 +61,15 @@ export function createGameById(gameId: number, platformId: number) {
     `INSERT INTO game_platform (game_id, platform_id) VALUES ($1, $2);`,
     [gameId, platformId]
   );
+  return result;
+}
+
+export function findRelation(id: number) {
+  const result = db.query(`SELECT * FROM game_platform WHERE id = $1;`, [id]);
+  return result;
+}
+
+export function deleteRelation(id: number) {
+  const result = db.query(`DELETE FROM game_platform WHERE id = $1;`, [id]);
   return result;
 }

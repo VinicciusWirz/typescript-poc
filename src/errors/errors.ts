@@ -13,3 +13,11 @@ export function conflictError(message: string) {
     message: errorMessage,
   };
 }
+
+export function unprocessableEntity(message:string){
+  const errorMessage: string = `${message && message} is not a valid input`.trim();
+  return {
+    type: "unprocessable-entity",
+    message: errorMessage,
+  };
+}

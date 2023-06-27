@@ -28,3 +28,10 @@ export async function createGame(game: string, platform: string) {
     await gameRepository.createGame(game, platformId);
   }
 }
+
+export async function deleteGameRelation(id: number) {
+  const relationExists = await gameRepository.findRelation(id);
+  if (!relationExists.rowCount) throw errors.notFoundError("Relation");
+
+  await gameRepository.deleteRelation(id);
+}
