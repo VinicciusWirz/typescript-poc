@@ -1,7 +1,8 @@
 import * as platformsRepository from "../repositories/platforms.repository";
-export function listPlatforms() {
+export async function listPlatforms() {
   const platform = undefined;
-  return platformsRepository.listPlatforms(platform);
+  const result = await platformsRepository.listPlatforms(platform);
+  return result.rows;
 }
 
 export function createPlatform() {
