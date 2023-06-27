@@ -32,7 +32,7 @@ export function listGames(game: string, platform: string) {
 
   return result;
 }
-export function createGame(game, platformId) {
+export function createGame(game: string, platformId: number) {
   const query: string = `WITH new_game AS (
     INSERT INTO games (name) 
     VALUES ($1) 
@@ -41,7 +41,24 @@ export function createGame(game, platformId) {
   INSERT INTO game_platform (game_id, platform_id)
   SELECT new_game.id, $2
   FROM new_game;`;
-  const params: string[] = [game, platformId];
+  const params: any[] = [game, platformId];
   const result = db.query(query, params);
+  return result;
+}
+
+export function findGameByName(game: string) {
+  const result = db.query(
+    `SELECT id FROM games 
+      WHERE name = $1;`,
+    [game]
+  );
+  return result;
+}
+
+export function createGameById(gameId: number, platformId: number) {
+  const result = db.query(
+    `INSERT INTO game_platform (game_id, platform_id) VALUES ($1, $2);`,
+    [gameId, platformId]
+  );
   return result;
 }

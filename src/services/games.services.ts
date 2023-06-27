@@ -16,9 +16,15 @@ export async function createGame(game: string, platform: string) {
   const platformId: number = parseInt(platformExists.rows[0].id);
 
   //2nd rule => Only one game per platform can exist
-  const gameInDB = await gameRepository.listGames(game, platform);
-  if (gameInDB.rowCount) throw errors.conflictError("Game for Platform");
+  const gamePlatformRelation = await gameRepository.listGames(game, platform);
+  if (gamePlatformRelation.rowCount)
+    throw errors.conflictError("Game for Platform");
 
-  await gameRepository.createGame(game, platformId);
-  return;
+  const gameInDB = await gameRepository.findGameByName(game);
+  if (gameInDB.rowCount) {
+    const gameId = gameInDB.rows[0].id;
+    await gameRepository.createGameById(gameId, platformId);
+  } else {
+    await gameRepository.createGame(game, platformId);
+  }
 }
