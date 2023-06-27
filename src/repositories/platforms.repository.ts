@@ -11,7 +11,11 @@ export function listPlatforms(platform: string) {
   const result = db.query(query, params);
   return result;
 }
-export function createPlatform() {
-  const result = db.query(`SELECT * FROM platforms`);
+export function createPlatform(platform: string) {
+  const result = db.query(
+    `INSERT INTO platforms (name) 
+  VALUES ($1);`,
+    [platform]
+  );
   return result;
 }

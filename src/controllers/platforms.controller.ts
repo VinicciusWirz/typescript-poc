@@ -7,6 +7,8 @@ export async function listPlatforms(req: Request, res: Response) {
   res.status(httpStatus.OK).send(list);
 }
 
-export function newPlatform(req: Request, res: Response) {
-  res.status(httpStatus.CREATED).send("rota post");
+export async function newPlatform(req: Request, res: Response) {
+  const { name } = req.body;
+  await platformServices.createPlatform(name);
+  res.status(httpStatus.CREATED).send("Platform was registred");
 }
