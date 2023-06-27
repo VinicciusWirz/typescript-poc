@@ -1,6 +1,7 @@
 import * as platformsRepository from "../repositories/platforms.repository";
 export function listPlatforms() {
-  return platformsRepository.listPlatforms();
+  const platform = undefined;
+  return platformsRepository.listPlatforms(platform);
 }
 
 export function createPlatform() {
