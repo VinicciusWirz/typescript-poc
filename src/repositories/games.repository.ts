@@ -1,6 +1,7 @@
+import { FullRelation, RequestListing } from "protocols";
 import { db } from "../database/database.connection";
 
-export function listGames(game: string, platform: string) {
+export async function listGames(game: string, platform: string) {
   let query: string = `
   SELECT 
     gp.id AS id,
@@ -29,11 +30,12 @@ export function listGames(game: string, platform: string) {
 
   query += `;`;
 
-  const result = db.query(query, params);
+  const result = await db.query<RequestListing>(query, params);
 
-  return result;
+  const { rows, rowCount } = result;
+  return { rows, rowCount };
 }
-export function createGame(game: string, platformId: number) {
+export async function createGame(game: string, platformId: number) {
   const query: string = `WITH new_game AS (
     INSERT INTO games (name) 
     VALUES ($1) 
@@ -42,30 +44,31 @@ export function createGame(game: string, platformId: number) {
   INSERT INTO game_platform (game_id, platform_id)
   SELECT new_game.id, $2
   FROM new_game;`;
-  const params: any[] = [game, platformId];
-  const result = db.query(query, params);
-  return result;
+  const params: (string | number)[] = [game, platformId];
+  await db.query(query, params);
+  return;
 }
 
-export function findGameByName(game: string) {
-  const result = db.query(
+export async function findGameByName(game: string) {
+  const result = await db.query<{ id: number }>(
     `SELECT id FROM games 
       WHERE name = $1;`,
     [game]
   );
-  return result;
+  const { rows, rowCount } = result;
+  return { rows, rowCount };
 }
 
-export function createGameById(gameId: number, platformId: number) {
-  const result = db.query(
+export async function createGameById(gameId: number, platformId: number) {
+  await db.query(
     `INSERT INTO game_platform (game_id, platform_id) VALUES ($1, $2);`,
     [gameId, platformId]
   );
-  return result;
+  return;
 }
 
-export function findRelation(id: number) {
-  const result = db.query(
+export async function findRelation(id: number) {
+  const result = await db.query<FullRelation>(
     `SELECT gp.*, games.name AS game, platforms.name AS platform
    FROM game_platform gp
    JOIN games ON gp.game_id = games.id
@@ -73,16 +76,17 @@ export function findRelation(id: number) {
    WHERE gp.id = $1;`,
     [id]
   );
-  return result;
+  const { rows, rowCount } = result;
+  return { rows, rowCount };
 }
 
-export function deleteRelation(id: number) {
-  const result = db.query(`DELETE FROM game_platform WHERE id = $1;`, [id]);
-  return result;
+export async function deleteRelation(id: number) {
+  await db.query(`DELETE FROM game_platform WHERE id = $1;`, [id]);
+  return;
 }
 
-export function listByGames(name: string) {
-  const result = db.query(
+export async function listByGames(name: string) {
+  const result = await db.query<RequestListing>(
     `
   SELECT 
   gp.id AS id,
@@ -95,13 +99,15 @@ export function listByGames(name: string) {
   `,
     [`%${name}%`]
   );
-  return result;
+  const { rows, rowCount } = result;
+  return { rows, rowCount };
 }
 
-export function editRelation(id: number, platformId: number) {
-  const result = db.query(
+export async function editRelation(id: number, platformId: number) {
+  const result = await db.query(
     `UPDATE game_platform SET platform_id = $2 WHERE id = $1;`,
     [id, platformId]
   );
-  return result;
+  const { rows, rowCount } = result;
+  return { rows, rowCount };
 }

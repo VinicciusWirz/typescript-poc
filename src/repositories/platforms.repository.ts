@@ -1,3 +1,4 @@
+import { RequestPlatform } from "protocols";
 import { db } from "../database/database.connection";
 
 export function listPlatforms(platform: string) {
@@ -8,14 +9,14 @@ export function listPlatforms(platform: string) {
     params.push(platform);
   }
   query += `;`;
-  const result = db.query(query, params);
+  const result = db.query<RequestPlatform>(query, params);
   return result;
 }
 export function createPlatform(platform: string) {
-  const result = db.query(
+  db.query(
     `INSERT INTO platforms (name) 
   VALUES ($1);`,
     [platform]
   );
-  return result;
+  return;
 }

@@ -1,5 +1,3 @@
-import httpStatus from "http-status";
-
 export function notFoundError(message: string) {
   const errorMessage: string = `${message && message} Not Found`.trim();
   return {

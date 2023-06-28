@@ -2,9 +2,10 @@ import * as platformsRepository from "../repositories/platforms.repository";
 import * as errors from "../errors/errors";
 
 export async function listPlatforms() {
-  const platform = undefined;
+  const platform: undefined = undefined;
   const result = await platformsRepository.listPlatforms(platform);
-  return result.rows;
+  const list = result.rows;
+  return list;
 }
 
 export async function createPlatform(name: string) {

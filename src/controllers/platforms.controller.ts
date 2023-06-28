@@ -8,7 +8,7 @@ export async function listPlatforms(req: Request, res: Response) {
 }
 
 export async function newPlatform(req: Request, res: Response) {
-  const { name } = req.body;
-  await platformServices.createPlatform(name);
+  const platform: string = req.body.platform;
+  await platformServices.createPlatform(platform);
   res.status(httpStatus.CREATED).send("Platform was registred");
 }
