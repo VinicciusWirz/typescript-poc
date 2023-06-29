@@ -50,7 +50,7 @@ export async function createGame(game: string, platformId: number) {
 }
 
 export async function findGameByName(game: string) {
-  const result = await db.query<{ id: number }>(
+  const result = await db.query<Pick<FullRelation, "id">>(
     `SELECT id FROM games 
       WHERE name = $1;`,
     [game]
@@ -104,10 +104,9 @@ export async function listByGames(name: string) {
 }
 
 export async function editRelation(id: number, platformId: number) {
-  const result = await db.query(
+  const result = await db.query<undefined>(
     `UPDATE game_platform SET platform_id = $2 WHERE id = $1;`,
     [id, platformId]
   );
-  const { rows, rowCount } = result;
-  return { rows, rowCount };
+  return;
 }
