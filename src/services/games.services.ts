@@ -3,9 +3,8 @@ import * as platformsRepository from "../repositories/platforms.repository";
 import * as errors from "../errors/errors";
 import { ServerResponse } from "protocols";
 
-export async function listGames() {
-  const game: undefined = undefined;
-  const platform: undefined = undefined;
+export async function listGames(game:string, platform:string) {
+
   const games = await gameRepository.listGames(game, platform);
   return games.rows;
 }
@@ -35,11 +34,6 @@ export async function deleteGameRelation(id: number) {
   if (!relationExists.rowCount) throw errors.notFoundError("Relation");
 
   await gameRepository.deleteRelation(id);
-}
-
-export async function listByGames(name: string) {
-  const list: ServerResponse = await gameRepository.listByGames(name);
-  return list.rows;
 }
 
 export async function editRelation(game: string, platform: string, id: number) {

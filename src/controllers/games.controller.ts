@@ -5,7 +5,9 @@ import httpStatus from "http-status";
 import { GamePlatform } from "protocols";
 
 export async function listGames(req: Request, res: Response) {
-  const list = await gamesServices.listGames();
+  const game = req.query.game as string;
+  const platform = req.query.platform as string;
+  const list = await gamesServices.listGames(game, platform);
   res.status(httpStatus.OK).send(list);
 }
 
@@ -18,19 +20,11 @@ export async function createGame(req: Request, res: Response) {
 }
 
 export async function deleteGameRelation(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id) as number;
   if (isNaN(id)) throw errors.unprocessableEntity(req.params.id);
 
   await gamesServices.deleteGameRelation(id);
   res.sendStatus(httpStatus.NO_CONTENT);
-}
-
-export async function listByGames(req: Request, res: Response) {
-  const game: string = req.params.game;
-
-  if (!game || game === "") throw errors.unprocessableEntity(game);
-  const list = await gamesServices.listByGames(game);
-  res.status(httpStatus.OK).send(list);
 }
 
 export async function editRelation(req: Request, res: Response) {

@@ -16,14 +16,14 @@ export async function listGames(game: string, platform: string) {
   if (game || platform) {
     query += ` WHERE`;
     if (game) {
-      params.push(game);
+      params.push(`%${game}%`);
       query += ` games.name ILIKE $${params.length}`;
     }
     if (game && platform) {
       query += ` AND`;
     }
     if (platform) {
-      params.push(platform);
+      params.push(`%${platform}%`);
       query += ` platforms.name ILIKE $${params.length}`;
     }
   }
@@ -35,6 +35,7 @@ export async function listGames(game: string, platform: string) {
   const { rows, rowCount } = result;
   return { rows, rowCount };
 }
+
 export async function createGame(game: string, platformId: number) {
   const query: string = `WITH new_game AS (
     INSERT INTO games (name) 
@@ -83,24 +84,6 @@ export async function findRelation(id: number) {
 export async function deleteRelation(id: number) {
   await db.query(`DELETE FROM game_platform WHERE id = $1;`, [id]);
   return;
-}
-
-export async function listByGames(name: string) {
-  const result = await db.query<RequestListing>(
-    `
-  SELECT 
-  gp.id AS id,
-  games.name AS game, 
-  platforms.name AS platform 
-  FROM games 
-  JOIN game_platform gp ON games.id = gp.game_id
-  JOIN platforms ON gp.platform_id = platforms.id
-  WHERE games.name ILIKE $1;
-  `,
-    [`%${name}%`]
-  );
-  const { rows, rowCount } = result;
-  return { rows, rowCount };
 }
 
 export async function editRelation(id: number, platformId: number) {
