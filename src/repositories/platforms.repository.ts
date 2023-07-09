@@ -1,24 +1,21 @@
-import { RequestPlatform } from "protocols";
-import { db } from "../database/database.connection";
+import prisma from "../database/database.connection";
 
 export async function listPlatforms(platform: string) {
-  let query: string = `SELECT * FROM platforms`;
-  const params: string[] = [];
-  if (platform) {
-    query += ` WHERE name ILIKE $1`;
-    params.push(platform);
-  }
-  query += `;`;
-  const result = await db.query<RequestPlatform>(query, params);
-  const { rows, rowCount }: { rows: RequestPlatform[]; rowCount: number } =
-    result;
-  return { rows, rowCount };
+  const platforms = await prisma.platform.findMany({
+    where: { name: { contains: platform, mode: "insensitive" } },
+  });
+  return platforms;
 }
-export function createPlatform(platform: string) {
-  db.query<undefined>(
-    `INSERT INTO platforms (name) 
-  VALUES ($1);`,
-    [platform]
-  );
-  return;
+export async function createPlatform(platform: string) {
+  const platformCreation = await prisma.platform.create({
+    data: { name: platform },
+  });
+  return platformCreation;
+}
+
+export async function findPlatform(platform: string) {
+  const platformDB = await prisma.platform.findUnique({
+    where: { name: platform },
+  });
+  return platformDB;
 }

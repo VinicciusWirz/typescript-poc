@@ -3,7 +3,8 @@ import httpStatus from "http-status";
 import * as platformServices from "../services/platforms.services";
 
 export async function listPlatforms(req: Request, res: Response) {
-  const list = await platformServices.listPlatforms();
+  const platform = req.query.platform as string;
+  const list = await platformServices.listPlatforms(platform);
   res.status(httpStatus.OK).send(list);
 }
 

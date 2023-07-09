@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game_platform {
+  id          Int        @id @default(autoincrement())
+  game_id     Int
+  platform_id Int
+  games       Game      @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  platforms   Platform  @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("game_platform")
+}
+
+model Game {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique
+  game_platform Game_platform[]
+  
+  @@map("games")
+}
+
+model Platform {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique
+  game_platform Game_platform[]
+
+  @@map("platforms")
+}
