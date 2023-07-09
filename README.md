@@ -5,7 +5,23 @@ This was a proof of concept about starting my studies with TypeScript.
 
 It was a brief introduction of types, designin a CRUD API from the start.
 
+## How to start
+Install dependencies with the command:
+```
+npm install
+```
 
+Follow the .env.example to setup the environment variables of your project (host, port, ...)
+
+Generate and populate the database with:
+```
+npm run migrate:dev
+```
+
+Start the application
+```
+npm run dev
+```
 
 ## Documentation
 
