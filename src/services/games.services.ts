@@ -52,8 +52,17 @@ export async function editRelation(game: string, platform: string, id: number) {
     throw errors.unauthorized(`Game is not on relation id`);
   // //2nd rule => There cannot be two of the same relations
   const platformFound = relationExists[0].platform;
-  if (game === gameFound && platform === platformFound)
+  const newRelationExists = await gameRepository.listGames(
+    game,
+    platform,
+    undefined
+  );
+  if (
+    (game === gameFound && platform === platformFound) ||
+    newRelationExists.length
+  ) {
     throw errors.conflictError("Game for Platform");
+  }
 
   //3rd rule => The platform must already exist in the db
   const platformExists = await platformsRepository.findPlatform(platform);

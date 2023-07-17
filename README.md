@@ -23,6 +23,29 @@ Start the application
 npm run dev
 ```
 
+## How to run tests
+Install dependencies with the command:
+```
+npm install
+```
+
+Duplicate your .env file and rename it to .env.test
+
+Change database to another name:
+```
+POSTGRES_DATABASE=EXAMPLE__test
+
+```
+Generate the database with:
+```
+npm run test:migration:run
+```
+
+Run the application tests with
+```
+npm run test
+```
+
 ## Documentation
 
 #### Returns all the game-relationship in the database

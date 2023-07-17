@@ -10,5 +10,4 @@ app.use(cors());
 app.use(indexRouter);
 app.use(errorHandler);
 
-const PORT: number = parseInt(process.env.PORT) || 5000;
-app.listen(PORT, () => console.log(`Server initiated on ${PORT}`));
+export default app;
