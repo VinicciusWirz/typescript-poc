@@ -20,16 +20,22 @@ export async function createGame(req: Request, res: Response) {
 }
 
 export async function deleteGameRelation(req: Request, res: Response) {
-  const id = parseInt(req.params.id) as number;
-  if (isNaN(id)) throw errors.unprocessableEntity(req.params.id);
+  const { id: input } = req.params;
+  const id = parseInt(input);
+  if (isNaN(id) || !id || id <= 0) {
+    throw errors.unprocessableEntity(req.params.id);
+  }
 
   await gamesServices.deleteGameRelation(id);
   res.sendStatus(httpStatus.NO_CONTENT);
 }
 
 export async function editRelation(req: Request, res: Response) {
-  const id: number = parseInt(req.params.id);
-  if (isNaN(id)) throw errors.unprocessableEntity(req.params.id);
+  const { id: input } = req.params;
+  const id = parseInt(input);
+  if (isNaN(id) || !id || id <= 0) {
+    throw errors.unprocessableEntity(req.params.id);
+  }
   const { game, platform }: GamePlatform = req.body;
   await gamesServices.editRelation(game, platform, id);
 

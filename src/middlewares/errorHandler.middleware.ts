@@ -14,6 +14,8 @@ export default function errorHandler(
     return res.status(httpStatus.CONFLICT).send(error.message);
   if (error.type === "unauthorized")
     return res.status(httpStatus.UNAUTHORIZED).send(error.message);
-console.log(error)
+  if (error.type === "unprocessable-entity")
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).send(error.message);
+  console.log(error);
   return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
 }
