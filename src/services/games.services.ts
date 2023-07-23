@@ -28,14 +28,14 @@ export async function createGame(game: string, platform: string) {
     const createdGame = await gameRepository.createGame(game);
     gameId = createdGame.id;
   }
-  await gameRepository.createRelation(gameId, platformId);
-  return;
+
+  return await gameRepository.createRelation(gameId, platformId);
 }
 
 export async function deleteGameRelation(id: number) {
   const relation = await gameRepository.findRelation(id);
   if (!relation) throw errors.notFoundError("Relation");
-  await gameRepository.deleteRelation(id);
+  return await gameRepository.deleteRelation(id);
 }
 
 export async function editRelation(game: string, platform: string, id: number) {
@@ -68,5 +68,5 @@ export async function editRelation(game: string, platform: string, id: number) {
   const platformExists = await platformsRepository.findPlatform(platform);
   if (!platformExists) throw errors.notFoundError("Platform");
   const platformId = platformExists.id;
-  await gameRepository.editRelation(id, platformId);
+  return await gameRepository.editRelation(id, platformId);
 }

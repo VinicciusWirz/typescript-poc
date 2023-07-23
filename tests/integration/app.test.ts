@@ -1,12 +1,9 @@
 import supertest from "supertest";
 import app from "../../src/app";
 import { createRelation } from "../factories/game-platform-factory";
-import { createGame, createGameSpecific } from "../factories/games-factory";
-import {
-  createPlatform,
-  createPlatformSpecific,
-} from "../factories/platforms-factory";
-import { cleanUp, generateRandomRelation, generateRelation } from "../helpers";
+import { createGame } from "../factories/games-factory";
+import { createPlatform } from "../factories/platforms-factory";
+import { cleanUp, generateRelation } from "../helpers";
 
 const server = supertest(app);
 
@@ -46,7 +43,7 @@ describe("GET /platforms", () => {
     });
 
     it("should respond 409 when gaming platform is already registered", async () => {
-      await createPlatformSpecific(validBody.platform);
+      await createPlatform(validBody.platform);
       const { status } = await server.post("/platforms").send(validBody);
       expect(status).toBe(409);
     });
@@ -70,23 +67,21 @@ describe("/games", () => {
 
   describe("POST", () => {
     it("should respond 201 when registering a new game-platform relation (game already in database)", async () => {
-      await createGameSpecific(validBody.game);
-      await createPlatformSpecific(validBody.platform);
+      await createGame(validBody.game);
+      await createPlatform(validBody.platform);
       const { status } = await server.post("/games").send(validBody);
       expect(status).toBe(201);
     });
 
     it("should respond 201 when registering a new game-platform relation (game NOT in database)", async () => {
-      await createPlatformSpecific(validBody.platform);
+      await createPlatform(validBody.platform);
       const { status } = await server.post("/games").send(validBody);
       expect(status).toBe(201);
     });
 
     it("should respond 409 when relation is already registered", async () => {
-      const { id: game_id } = await createGameSpecific(validBody.game);
-      const { id: platform_id } = await createPlatformSpecific(
-        validBody.platform
-      );
+      const { id: game_id } = await createGame(validBody.game);
+      const { id: platform_id } = await createPlatform(validBody.platform);
       await createRelation(game_id, platform_id);
       const { status } = await server.post("/games").send(validBody);
 
@@ -106,10 +101,8 @@ describe("/games", () => {
   });
   describe("DELETE", () => {
     it("should delete when relation exists and params are valid", async () => {
-      const { id: game_id } = await createGameSpecific(validBody.game);
-      const { id: platform_id } = await createPlatformSpecific(
-        validBody.platform
-      );
+      const { id: game_id } = await createGame(validBody.game);
+      const { id: platform_id } = await createPlatform(validBody.platform);
       const { id } = await createRelation(game_id, platform_id);
       const { status } = await server.delete(`/games/relation/${id}`);
       expect(status).toBe(204);
@@ -138,7 +131,7 @@ describe("/games", () => {
         validBody.game,
         validBody.platform
       );
-      await createPlatformSpecific(newPlatform);
+      await createPlatform(newPlatform);
       const { status } = await server
         .patch(`/games/relation/${relation.id}`)
         .send({ game: validBody.game, platform: newPlatform });

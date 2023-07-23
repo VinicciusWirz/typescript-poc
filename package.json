@@ -11,6 +11,7 @@
     "migrate:dev": "prisma migrate dev && prisma db seed",
     "test:load-envs": "dotenv -e .env.test",
     "test:migration:run": "npm run test:load-envs prisma migrate deploy",
+    "test:coverage": "npm run test:load-envs -- jest -- --coverage --runInBand",
     "test": "npm run test:load-envs -- jest -- --runInBand"
   },
   "repository": {

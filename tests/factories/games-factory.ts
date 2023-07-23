@@ -1,18 +1,17 @@
 import prisma from "../../src/database/database.connection";
 import { faker } from "@faker-js/faker";
 
-export async function createGame() {
+export async function createGame(name: string = undefined) {
   return await prisma.game.create({
     data: {
-      name: faker.commerce.productName(),
+      name: buildGame(name).name,
     },
   });
 }
 
-export async function createGameSpecific(name: string) {
-  return await prisma.game.create({
-    data: {
-      name,
-    },
-  });
+export function buildGame(name: string = undefined) {
+  return {
+    id: faker.number.int({ max: 999999 }),
+    name: name || faker.commerce.productName(),
+  };
 }

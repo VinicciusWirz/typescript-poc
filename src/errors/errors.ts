@@ -25,9 +25,8 @@ export function unprocessableEntity(message: string) {
 }
 
 export function unauthorized(message: string) {
-  const errorMessage: string = message ? message : `Unauthorized Access`;
   return {
     type: "unauthorized",
-    message: errorMessage,
+    message: message || `Unauthorized Access`,
   };
 }

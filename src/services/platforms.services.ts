@@ -2,8 +2,7 @@ import * as platformsRepository from "../repositories/platforms.repository";
 import * as errors from "../errors/errors";
 
 export async function listPlatforms(platform: string) {
-  const platformList = await platformsRepository.listPlatforms(platform);
-  return platformList;
+  return await platformsRepository.listPlatforms(platform);
 }
 
 export async function createPlatform(name: string) {
@@ -11,6 +10,5 @@ export async function createPlatform(name: string) {
   const platformExists = await platformsRepository.listPlatforms(name);
   if (platformExists.length) throw errors.conflictError("Platform");
 
-  await platformsRepository.createPlatform(name);
-  return;
+  return await platformsRepository.createPlatform(name);
 }
